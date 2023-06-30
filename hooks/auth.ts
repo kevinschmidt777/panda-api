@@ -17,7 +17,9 @@ export const authHook = async (
 ) => {
   // Check if the user is authenticated and parse the user into the request object.
   if (!request.headers.authorization)
-    return reply.status(401).send("No authorization header provided.");
+    return reply
+      .status(401)
+      .send({ message: "No authorization header provided." });
   const jwt = verify(request.headers.authorization, jwtSecret);
   if (jwt) {
     request.headers.user = jwt as Users;
