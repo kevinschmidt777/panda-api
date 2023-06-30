@@ -15,8 +15,8 @@ import { authHook } from "../../hooks";
 export const authRoutes: FastifyPluginAsync = async (
   server: FastifyInstance
 ) => {
-  server.post("/auth/signup", {}, () => authSignUpController);
-  server.post("/auth/login", {}, () => authLoginController);
+  server.post("/auth/signup", {}, authSignUpController);
+  server.post("/auth/login", {}, authLoginController);
   server.post(
     "/auth/changepw",
     {
