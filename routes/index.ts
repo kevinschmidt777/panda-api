@@ -1,1 +1,3 @@
-export * from "./test/routes";
+export * from "./schema";
+export * from "./auth/routes";
+export * from "./auth/schema";
