@@ -5,3 +5,7 @@ export interface IRouteGetTestQuerystring {
 export interface IRouteGetTestParams {
   id: number;
 }
+
+export interface IRouteGetTestBody {}
+
+export interface IRouteGetTestHeaders {}
