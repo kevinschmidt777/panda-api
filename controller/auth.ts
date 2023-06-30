@@ -69,7 +69,8 @@ export const authChangePwController = async (
       },
     });
     const verified = await compare(request.body.oldPassword, dbUser.password);
-    if (!verified) return reply.code(401).send("Wrong credentials.");
+    if (!verified)
+      return reply.code(401).send({ message: "Wrong credentials." });
     const newHashedPw = await hash(request.body.newPassword, 10);
     await dbClient.users.update({
       where: {
