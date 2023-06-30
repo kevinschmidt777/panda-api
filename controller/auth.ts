@@ -17,7 +17,7 @@ export const authSignUpController = async (
   reply: FastifyReply
 ) => {
   try {
-    const hashedPw = await hash(request.body.password, 10);
+    const hashedPw = await hash(`${request.body.password}${jwtSecret}`, 10);
     await dbClient.users.create({
       data: {
         email: request.body.email,
@@ -42,7 +42,10 @@ export const authLoginController = async (
         email: request.body.email,
       },
     });
-    const match = await compare(request.body.password, data.password);
+    const match = await compare(
+      `${request.body.password}${jwtSecret}`,
+      data.password
+    );
     if (match) {
       const jwt = sign(userStrippedSensitiveData(data), jwtSecret, {
         expiresIn: "1w",
@@ -68,9 +71,15 @@ export const authChangePwController = async (
         id: request.headers.user?.id,
       },
     });
-    const verified = await compare(request.body.oldPassword, dbUser.password);
+    const verified = await compare(
+      `${request.body.oldPassword}${jwtSecret}`,
+      dbUser.password
+    );
     if (!verified) return reply.code(401).send("Wrong credentials.");
-    const newHashedPw = await hash(request.body.newPassword, 10);
+    const newHashedPw = await hash(
+      `${request.body.newPassword}${jwtSecret}`,
+      10
+    );
     await dbClient.users.update({
       where: {
         id: dbUser.id,
