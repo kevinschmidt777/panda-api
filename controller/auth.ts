@@ -42,12 +42,13 @@ export const authLoginController = async (
         email: request.body.email,
       },
     });
+    const strippedUser = userStrippedSensitiveData(data);
     const match = await compare(request.body.password, data.password);
     if (match) {
-      const jwt = sign(userStrippedSensitiveData(data), jwtSecret, {
+      const jwt = sign(strippedUser, jwtSecret, {
         expiresIn: "1w",
       });
-      return reply.code(200).send(jwt);
+      return reply.code(200).send({ ...strippedUser, token: jwt });
     }
     return reply.code(401).send("Wrong credentials.");
   } catch (error) {
