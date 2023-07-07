@@ -8,7 +8,7 @@ export interface IRoutePostAuthLoginBody {
   password: string;
 }
 
-export interface IRoutePostChangePwBody {
+export interface IRoutePostAuthChangePwBody {
   oldPassword: string;
   newPassword: string;
 }

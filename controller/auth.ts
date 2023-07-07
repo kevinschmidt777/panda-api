@@ -1,9 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import {
   IRouteCommonHeaders,
+  IRoutePostAuthChangePwBody,
   IRoutePostAuthLoginBody,
   IRoutePostAuthSignUpBody,
-  IRoutePostChangePwBody,
 } from "../routes";
 import { compare, hash } from "bcrypt";
 import { sign } from "jsonwebtoken";
@@ -59,7 +59,7 @@ export const authLoginController = async (
 export const authChangePwController = async (
   request: FastifyRequest<{
     Headers: IRouteCommonHeaders;
-    Body: IRoutePostChangePwBody;
+    Body: IRoutePostAuthChangePwBody;
   }>,
   reply: FastifyReply
 ) => {
