@@ -8,7 +8,12 @@ import {
 import { compare, hash } from "bcrypt";
 import { sign } from "jsonwebtoken";
 import dbClient from "../utils/database";
-import { jwtSecret, userStrippedSensitiveData } from "../utils";
+import {
+  jwtExpiresIn,
+  jwtSecret,
+  userStrippedSensitiveData,
+  generateString,
+} from "../utils";
 
 export const authSignUpController = async (
   request: FastifyRequest<{
@@ -43,10 +48,18 @@ export const authLoginController = async (
       },
     });
     const strippedUser = userStrippedSensitiveData(data);
+    const sessionId = generateString();
     const match = await compare(request.body.password, data.password);
     if (match) {
-      const jwt = sign(strippedUser, jwtSecret, {
-        expiresIn: "1w",
+      const jwt = sign({ ...strippedUser, sessionId: sessionId }, jwtSecret, {
+        expiresIn: jwtExpiresIn,
+      });
+      // Save sessionId into database.
+      await dbClient.userSessions.create({
+        data: {
+          userId: data.id,
+          sessionId: sessionId,
+        },
       });
       return reply.code(200).send({ ...strippedUser, token: jwt });
     }
